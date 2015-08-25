@@ -1,4 +1,4 @@
-Gov.br -> Arquivos texto sãos
+Gov.br => Arquivos Texto Sãos
 ======
 
 ~~Por algum motivo~~ (não existe motivo) o governo brasileiro tem fixação por XLS.
