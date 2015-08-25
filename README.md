@@ -36,3 +36,9 @@ Download:
 ## IPCA
 
 PRODLST -> CSV
+
+
+
+## Updates/future
+
+Just run `./update`. CNAEs ok, but CBO has captcha. =/
