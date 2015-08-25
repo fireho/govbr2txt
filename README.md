@@ -8,12 +8,29 @@ Esse projeto tenta corrigir isso.
 
 ## CNAE
 
-http://concla.ibge.gov.br/images/concla/downloads/Subclasses%20CNAE%202.2%20-%20Estrutura.xls
+Cadastro Nacional de Atividade Econômica
 
-Download: CSV, YML, BSON
+[Source](http://concla.ibge.gov.br/images/concla/downloads/Subclasses%20CNAE%202.2%20-%20Estrutura.xls)
+
+Download:
+
+- [CSV](https://github.com/fireho/govbr2txt/blob/master/readable/cnaes.csv)
+- [YML](https://github.com/fireho/govbr2txt/blob/master/readable/cbos.yml)
+- [JSON](https://github.com/fireho/govbr2txt/blob/master/readable/cbos.json)
 
 
 ## CBO
 
+Cadastro Brasileiro de Ocupações
+
+
+Download:
+
+- [CSV](https://github.com/fireho/govbr2txt/blob/master/readable/cbos.csv)
+- [YML](https://github.com/fireho/govbr2txt/blob/master/readable/cbos.yml)
+- [JSON](https://github.com/fireho/govbr2txt/blob/master/readable/cbos.json)
+
+
+## IPCA
 
 PRODLST -> CSV
