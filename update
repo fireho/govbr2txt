@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+require 'roo'
+require 'roo-xls'
+require 'csv'
+require 'yaml'
+require 'json'
+
+T = Time.now
+# Download manually
+CNAE_URL = 'http://concla.ibge.gov.br/images/concla/downloads/Subclasses%20CNAE%202.2%20-%20Estrutura.xls'
+CBO_URL = 'http://www.mtecbo.gov.br/cbosite/pages/downloads.jsf' # STUPID CAPTCHA
+I_PATH = 'unreadable/'
+
+cnaes = Roo::Spreadsheet.open('unreadable/cnaes.xls')
+#cnaes.default_sheet = cnaes.sheet(0)
+
+data = { cnaes: {}, cbos: {}, prod: {} }
+
+print 'Updating CNAE'
+#
+# CNAES
+#
+cnaes.each do |cnae|
+  _, section, division, group, klass, subklass, txt = cnae
+  # puts "#{division} #{group} #{klass} #{subklass} #{txt}"
+  txt, *key = cnae.reverse
+  next unless key.join =~ /^\d.+\d$/
+  # data[:cnaes] << { _id: key.join, name: txt }
+  data[:cnaes].merge!({ key.join => txt })
+end
+
+puts " ... #{data[:cnaes].size}"
+
+print 'Updating CNAE'
+#
+# CBOs
+#
+%w( subgrupo-principal subgrupo ocupacao ).each do |file|
+  File.open("#{I_PATH}/CBO-#{file}.txt", 'r:ISO-8859-1:UTF-8').each_line do |l|
+    key, txt = l.strip.chomp.split(/\s/, 2).map(&:strip)
+    next unless key =~ /^\d/
+    data[:cbos].merge!({ key => txt })
+  end
+end
+
+File.open("#{I_PATH}/CBO-sinonimo.txt", 'r:ISO-8859-1:UTF-8').each_line do |l|
+  key, txt = l.strip.chomp.split(/\s/, 2).map(&:strip)
+  next unless key =~ /^\d/
+  data[:cbos][key] += ", #{txt}"
+end
+
+puts " ... #{data[:cbos].size}"
+
+
+#
+# Export
+#
+data.each do |k, v|
+  puts "Dumping #{k} CSV"
+  CSV.open("readable/#{k}.csv", 'w') do |csv|
+    v.each { |id, val| csv << [id, val] }
+  end
+  puts "Dumping #{k} JSON"
+  File.write("readable/#{k}.json", JSON.generate(v))
+  puts "Dumping #{k} YAML"
+  File.write("readable/#{k}.yml", v.to_yaml)
+end
+
+puts
+puts "Done in #{(Time.now - T).round(3)}s"
