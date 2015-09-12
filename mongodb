@@ -10,27 +10,26 @@ DB = ARGV.join
 fail 'Please provide a DB' if DB.empty?
 
 p "Restoring data to #{DB}"
-c = Mongo::Client.new(['127.0.0.1:27017'], :database => DB)
-trades = c[:trades]
+c = Mongo::Client.new(['127.0.0.1:27017'], database: DB)
+trades = c[:commercials]
 profs = c[:professions]
 
 puts
 puts 'CNAES'
 CNAES.each do |k, v|
-  if trades.find(_id: k)
+  if trades.find(_id: k).first
     trades.find(_id: k).replace_one(name: v)
   else
-    trades.insert_one({ _id: k, name: v })
+    trades.insert_one(_id: k, name: v)
   end
 end
 
-
 puts
 puts 'CBOS'
-CNAES.each do |k, v|
-  if profs.find(_id: k)
+CBOS.each do |k, v|
+  if profs.find(_id: k).first
     profs.find(_id: k).replace_one(name: v)
   else
-    profs.insert_one({ _id: k, name: v })
+    profs.insert_one(_id: k, name: v)
   end
 end
